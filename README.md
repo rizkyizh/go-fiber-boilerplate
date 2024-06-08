@@ -75,9 +75,9 @@ Go Fiber Boilerplate is a starter template for building simple REST APIs using G
 Feel free to contribute to this project! Whether it's bug reports, feature requests, or pull requests, all contributions are welcome.
 
 1. Fork the project.
-2. Create your feature branch (git checkout -b feature/YourFeature).
-3. Commit your changes (git commit -m 'Add some YourFeature').
-4. Push to the branch (git push origin feature/YourFeature).
+2. Create your feature branch `git checkout -b feature/YourFeature`.
+3. Commit your changes `git commit -m 'feat: add some YourFeature'`.
+4. Push to the branch `git push origin feature/YourFeature`.
 5. Open a pull request.
 
 ### License
