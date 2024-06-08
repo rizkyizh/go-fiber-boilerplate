@@ -28,25 +28,25 @@ Go Fiber Boilerplate is a starter template for building simple REST APIs using G
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/go-fiber-boilerplate.git
+   git clone https://github.com/rizkyizh/go-fiber-boilerplate.git
    cd go-fiber-boilerplate
    ```
 
 2. **Install dependencies:**
 
-```bash
-go mod tidy
-```
+   ```bash
+   go mod tidy
+   ```
 
 3. **Setup PostgreSQL:**
 
-- Create a PostgreSQL database and update the connection settings in the `config` file.
+   - Create a PostgreSQL database and update the connection settings in the `config` file.
 
 4. **Run the application:**
 
-```bash
-go run main.go
-```
+   ```bash
+   go run main.go
+   ```
 
 ### Project Structure
 
