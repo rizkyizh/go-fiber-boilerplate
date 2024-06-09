@@ -6,7 +6,6 @@ import (
 
 	"github.com/rizkyizh/go-fiber-boilerplate/app/dto"
 	"github.com/rizkyizh/go-fiber-boilerplate/app/mappers"
-	"github.com/rizkyizh/go-fiber-boilerplate/app/models"
 	"github.com/rizkyizh/go-fiber-boilerplate/app/repositories"
 	"github.com/rizkyizh/go-fiber-boilerplate/utils"
 )
@@ -15,7 +14,7 @@ type UserService interface {
 	CreateUser(dto *dto.UserDTO) error
 	GetAllUsers(query utils.QueryParams) ([]*dto.UserDTO, utils.Meta, error)
 	GetUserById(userId string) (*dto.UserDTO, error)
-	UpdateUser(userId string, dto *dto.UpdateUserDTO) (*models.User, error)
+	UpdateUser(userId string, dto *dto.UpdateUserDTO) (*dto.UserDTO, error)
 	DeleteUser(userId string) error
 }
 
@@ -71,7 +70,7 @@ func (s *userService) GetUserById(id string) (*dto.UserDTO, error) {
 	return userDTO, err
 }
 
-func (s *userService) UpdateUser(id string, dto *dto.UpdateUserDTO) (*models.User, error) {
+func (s *userService) UpdateUser(id string, dto *dto.UpdateUserDTO) (*dto.UserDTO, error) {
 	userId, err := strconv.ParseUint(id, 10, 0)
 	if err != nil {
 		return nil, nil
@@ -97,7 +96,9 @@ func (s *userService) UpdateUser(id string, dto *dto.UpdateUserDTO) (*models.Use
 		return nil, err
 	}
 
-	return updateduser, nil
+	userDTO := mappers.ToUserDTO(updateduser)
+
+	return userDTO, nil
 }
 
 func (s *userService) DeleteUser(id string) error {
