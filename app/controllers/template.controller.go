@@ -42,7 +42,7 @@ func (ctrl *UserController) CreateUser(c *fiber.Ctx) error {
 		return h.BadRequest(c, []string{err.Error()})
 	}
 
-	err := ctrl.service.CreateUser(dto)
+	err := ctrl.service.CreateUser(&dto)
 	if err != nil {
 		return h.BadRequest(c, []string{err.Error()})
 	}
@@ -67,7 +67,7 @@ func (ctrl *UserController) UpdateUser(c *fiber.Ctx) error {
 
 	h := &utils.ResponseHandler{}
 
-	var dto dto.UpdateUserDTO
+	var dto *dto.UpdateUserDTO
 	if err := c.BodyParser(&dto); err != nil {
 		return h.BadRequest(c, []string{err.Error()})
 	}

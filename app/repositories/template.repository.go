@@ -7,7 +7,7 @@ import (
 
 type UserRepository interface {
 	CreateUser(user *models.User) error
-	GetUsers(page, perPage int) ([]models.User, int64, error)
+	GetUsers(page, perPage int) ([]*models.User, int64, error)
 	GetUser(userId uint) (*models.User, error)
 	UpdateUser(userId uint, user *models.User) error
 	DeleteUser(userId uint) error
@@ -26,8 +26,8 @@ func (r *userRepository) CreateUser(user *models.User) error {
 	return nil
 }
 
-func (r *userRepository) GetUsers(page, perPage int) ([]models.User, int64, error) {
-	var users []models.User
+func (r *userRepository) GetUsers(page, perPage int) ([]*models.User, int64, error) {
+	var users []*models.User
 	var totalItems int64
 
 	// count total items
