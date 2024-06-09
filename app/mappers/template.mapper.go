@@ -7,6 +7,7 @@ import (
 
 func ToUserDTO(user models.User) dto.UserDTO {
 	return dto.UserDTO{
+		ID:    user.ID,
 		Name:  user.Name,
 		Email: user.Email,
 		Age:   user.Age,

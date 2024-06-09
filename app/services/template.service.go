@@ -12,9 +12,9 @@ import (
 )
 
 type UserService interface {
-	CreateUser(dto dto.UserDTO) (*models.User, error)
+	CreateUser(dto dto.UserDTO) error
 	GetAllUsers(query utils.QueryParams) ([]models.User, utils.Meta, error)
-	GetUserById(userId string) (*models.User, error)
+	GetUserById(userId string) (*dto.UserDTO, error)
 	UpdateUser(userId string, dto dto.UpdateUserDTO) (*models.User, error)
 	DeleteUser(userId string) error
 }
@@ -29,14 +29,14 @@ func NewUserService(userRepository repositories.UserRepository) UserService {
 	}
 }
 
-func (s *userService) CreateUser(dto dto.UserDTO) (*models.User, error) {
+func (s *userService) CreateUser(dto dto.UserDTO) error {
 	user := mappers.ToUser(dto)
 
 	err := s.userRepository.CreateUser(&user)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &user, nil
+	return nil
 }
 
 func (s *userService) GetAllUsers(query utils.QueryParams) ([]models.User, utils.Meta, error) {
@@ -54,14 +54,19 @@ func (s *userService) GetAllUsers(query utils.QueryParams) ([]models.User, utils
 	return users, meta, err
 }
 
-func (s *userService) GetUserById(id string) (*models.User, error) {
+func (s *userService) GetUserById(id string) (*dto.UserDTO, error) {
 	userId, err := strconv.ParseUint(id, 10, 0)
 	if err != nil {
 		return nil, nil
 	}
 	user, err := s.userRepository.GetUser(uint(userId))
+	if err != nil {
+		return nil, err
+	}
 
-	return user, err
+	userDTO := mappers.ToUserDTO(*user)
+
+	return &userDTO, err
 }
 
 func (s *userService) UpdateUser(id string, dto dto.UpdateUserDTO) (*models.User, error) {

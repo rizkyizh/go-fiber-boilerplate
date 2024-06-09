@@ -42,11 +42,11 @@ func (ctrl *UserController) CreateUser(c *fiber.Ctx) error {
 		return h.BadRequest(c, []string{err.Error()})
 	}
 
-	user, err := ctrl.service.CreateUser(dto)
+	err := ctrl.service.CreateUser(dto)
 	if err != nil {
 		return h.BadRequest(c, []string{err.Error()})
 	}
-	return h.Created(c, user, "user created successfully")
+	return h.Created(c, nil, "user created successfully")
 }
 
 func (ctrl *UserController) GetUser(c *fiber.Ctx) error {

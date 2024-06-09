@@ -1,9 +1,10 @@
 package dto
 
 type UserDTO struct {
-	Name  string `json:"name"  validate:"required,min=3,max=32"`
-	Email string `json:"email" validate:"required,email"`
-	Age   int    `json:"age"   validate:"required"`
+	ID    uint   `json:"id,omitempty"`
+	Name  string `json:"name"         validate:"required,min=3,max=32"`
+	Email string `json:"email"        validate:"required,email"`
+	Age   int    `json:"age"          validate:"required"`
 }
 
 type UpdateUserDTO struct {
