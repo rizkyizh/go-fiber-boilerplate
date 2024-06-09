@@ -5,7 +5,7 @@ import (
 	"github.com/rizkyizh/go-fiber-boilerplate/app/models"
 )
 
-func ToUserDTO(user *models.User) *dto.UserDTO {
+func UserModel_ToUserDTO(user *models.User) *dto.UserDTO {
 	return &dto.UserDTO{
 		ID:    user.ID,
 		Name:  user.Name,
@@ -14,7 +14,7 @@ func ToUserDTO(user *models.User) *dto.UserDTO {
 	}
 }
 
-func ToUser(userDTO *dto.UserDTO) *models.User {
+func UserDTO_ToUserModel(userDTO *dto.UserDTO) *models.User {
 	return &models.User{
 		Name:  userDTO.Name,
 		Email: userDTO.Email,
@@ -22,7 +22,7 @@ func ToUser(userDTO *dto.UserDTO) *models.User {
 	}
 }
 
-func UpdateUserDTO_ToUser(updateUserDTO *dto.UpdateUserDTO) *models.User {
+func UpdateUserDTO_ToUserModel(updateUserDTO *dto.UpdateUserDTO) *models.User {
 	return &models.User{
 		Name:  updateUserDTO.Name,
 		Email: updateUserDTO.Email,
@@ -30,7 +30,7 @@ func UpdateUserDTO_ToUser(updateUserDTO *dto.UpdateUserDTO) *models.User {
 	}
 }
 
-func UsersToDTOs(users []*models.User) []*dto.UserDTO {
+func UsersModel_ToUsersDTOs(users []*models.User) []*dto.UserDTO {
 	dtos := make([]*dto.UserDTO, len(users))
 	for i, user := range users {
 		dtos[i] = &dto.UserDTO{
@@ -41,4 +41,12 @@ func UsersToDTOs(users []*models.User) []*dto.UserDTO {
 		}
 	}
 	return dtos
+}
+
+func CreateUserDTO_ToUserModel(createUserDTO *dto.CreateUserDTO) *models.User {
+	return &models.User{
+		Name:  createUserDTO.Name,
+		Email: createUserDTO.Email,
+		Age:   createUserDTO.Age,
+	}
 }

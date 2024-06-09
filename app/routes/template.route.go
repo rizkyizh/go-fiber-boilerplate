@@ -17,7 +17,7 @@ func UserRoutes(route fiber.Router) {
 
 	route.Get("/", userController.GetUsers)
 	route.Get("/:id", userController.GetUser)
-	route.Post("/", middlewares.ValidateRequest(&dto.UserDTO{}), userController.CreateUser)
+	route.Post("/", middlewares.ValidateRequest(&dto.CreateUserDTO{}), userController.CreateUser)
 	route.Patch(
 		"/:id",
 		middlewares.ValidateRequest(&dto.UpdateUserDTO{}),

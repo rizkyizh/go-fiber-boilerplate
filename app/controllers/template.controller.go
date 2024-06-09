@@ -37,7 +37,7 @@ func (ctrl *UserController) GetUsers(c *fiber.Ctx) error {
 
 func (ctrl *UserController) CreateUser(c *fiber.Ctx) error {
 	h := &utils.ResponseHandler{}
-	var dto dto.UserDTO
+	var dto dto.CreateUserDTO
 	if err := c.BodyParser(&dto); err != nil {
 		return h.BadRequest(c, []string{err.Error()})
 	}

@@ -11,7 +11,7 @@ import (
 )
 
 type UserService interface {
-	CreateUser(dto *dto.UserDTO) error
+	CreateUser(dto *dto.CreateUserDTO) error
 	GetAllUsers(query utils.QueryParams) ([]*dto.UserDTO, utils.Meta, error)
 	GetUserById(userId string) (*dto.UserDTO, error)
 	UpdateUser(userId string, dto *dto.UpdateUserDTO) (*dto.UserDTO, error)
@@ -28,8 +28,8 @@ func NewUserService(userRepository repositories.UserRepository) UserService {
 	}
 }
 
-func (s *userService) CreateUser(dto *dto.UserDTO) error {
-	user := mappers.ToUser(dto)
+func (s *userService) CreateUser(dto *dto.CreateUserDTO) error {
+	user := mappers.CreateUserDTO_ToUserModel(dto)
 
 	err := s.userRepository.CreateUser(user)
 	if err != nil {
@@ -46,7 +46,7 @@ func (s *userService) GetAllUsers(query utils.QueryParams) ([]*dto.UserDTO, util
 		return nil, utils.Meta{}, err
 	}
 
-	usersDTOs := mappers.UsersToDTOs(users)
+	usersDTOs := mappers.UsersModel_ToUsersDTOs(users)
 
 	meta := utils.MetaPagination(
 		page, PerPage, int(totalItems),
@@ -65,7 +65,7 @@ func (s *userService) GetUserById(id string) (*dto.UserDTO, error) {
 		return nil, err
 	}
 
-	userDTO := mappers.ToUserDTO(user)
+	userDTO := mappers.UserModel_ToUserDTO(user)
 
 	return userDTO, err
 }
@@ -84,7 +84,7 @@ func (s *userService) UpdateUser(id string, dto *dto.UpdateUserDTO) (*dto.UserDT
 		return nil, errors.New("User not found")
 	}
 
-	userModel := mappers.UpdateUserDTO_ToUser(dto)
+	userModel := mappers.UpdateUserDTO_ToUserModel(dto)
 
 	err = s.userRepository.UpdateUser(uint(userId), userModel)
 	if err != nil {
@@ -96,7 +96,7 @@ func (s *userService) UpdateUser(id string, dto *dto.UpdateUserDTO) (*dto.UserDT
 		return nil, err
 	}
 
-	userDTO := mappers.ToUserDTO(updateduser)
+	userDTO := mappers.UserModel_ToUserDTO(updateduser)
 
 	return userDTO, nil
 }
