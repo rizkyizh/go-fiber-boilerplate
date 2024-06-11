@@ -8,6 +8,7 @@ import (
 
 	"github.com/rizkyizh/go-fiber-boilerplate/config"
 	"github.com/rizkyizh/go-fiber-boilerplate/database"
+	"github.com/rizkyizh/go-fiber-boilerplate/middlewares"
 	"github.com/rizkyizh/go-fiber-boilerplate/routes"
 )
 
@@ -20,6 +21,8 @@ func main() {
 	database.ConnectDB()
 
 	app := fiber.New()
+
+	middlewares.SetupCORS(app)
 
 	routes.SetupRoutesApp(app)
 
