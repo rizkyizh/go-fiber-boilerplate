@@ -49,7 +49,7 @@ func (s *userService) GetAllUsers(query utils.QueryParams) ([]*dto.UserDTO, util
 	usersDTOs := mappers.UsersModel_ToUsersDTOs(users)
 
 	meta := utils.MetaPagination(
-		page, PerPage, int(totalItems),
+		page, PerPage, len(users), int(totalItems),
 	)
 
 	return usersDTOs, meta, err

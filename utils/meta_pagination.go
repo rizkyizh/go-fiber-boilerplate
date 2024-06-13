@@ -11,22 +11,25 @@ type QueryParams struct {
 }
 
 type Meta struct {
-	CurrentPage int `json:"currentPage"`
-	PerPage     int `json:"perPage"`
-	TotalPages  int `json:"totalPages"`
-	TotalData   int `json:"totalData"`
+	CurrentPage      int `json:"currentPage"`
+	PerPage          int `json:"perPage"`
+	TotalCurrentPage int `json:"totalCurrentPage"`
+	TotalPage        int `json:"totalPage"`
+	TotalData        int `json:"totalData"`
 }
 
 func MetaPagination(
 	page int,
 	perPage int,
+	totalCurrentPage int,
 	total int,
 ) Meta {
 	return Meta{
-		CurrentPage: page,
-		PerPage:     perPage,
-		TotalPages:  ((total + perPage - 1) / perPage),
-		TotalData:   total,
+		CurrentPage:      page,
+		PerPage:          perPage,
+		TotalCurrentPage: totalCurrentPage,
+		TotalPage:        ((total + perPage - 1) / perPage),
+		TotalData:        total,
 	}
 }
 
