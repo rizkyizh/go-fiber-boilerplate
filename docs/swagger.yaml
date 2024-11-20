@@ -1,0 +1,225 @@
+basePath: /
+definitions:
+  dto.CreateUserDTO:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      name:
+        maxLength: 32
+        minLength: 3
+        type: string
+    required:
+    - age
+    - email
+    - name
+    type: object
+  dto.UpdateUserDTO:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      name:
+        maxLength: 32
+        minLength: 3
+        type: string
+    type: object
+  utils.ErrorDetails:
+    properties:
+      code:
+        type: string
+      message:
+        items:
+          type: string
+        type: array
+    type: object
+  utils.ErrorResponse:
+    properties:
+      error:
+        $ref: '#/definitions/utils.ErrorDetails'
+      status:
+        type: string
+    type: object
+  utils.Meta:
+    properties:
+      currentPage:
+        type: integer
+      perPage:
+        type: integer
+      totalCurrentPage:
+        type: integer
+      totalData:
+        type: integer
+      totalPage:
+        type: integer
+    type: object
+  utils.ResponseData:
+    properties:
+      data: {}
+      message:
+        type: string
+      meta:
+        $ref: '#/definitions/utils.Meta'
+      status:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample boilerplate for Go Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Go Fiber Boilerplate
+  version: "1.0"
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get List of Users
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: PerPage
+        in: query
+        name: perPage
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Search
+        in: query
+        name: search
+        type: string
+      - description: Status
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Get List of Users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Create User
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Create User
+      tags:
+      - Users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete User
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Delete User
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: Get User
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Get User
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update User
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Update User
+      tags:
+      - Users
+swagger: "2.0"
