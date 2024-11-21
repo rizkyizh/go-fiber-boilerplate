@@ -20,6 +20,20 @@ func NewUserController(service services.UserService) *UserController {
 	}
 }
 
+// Get List of Users godoc
+// @Summary Get List of Users
+// @Description Get List of Users
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param page query int false "Page"
+// @Param perPage query int false "PerPage"
+// @Param sort query string false "Sort"
+// @Param search query string false "Search"
+// @Param status query string false "Status"
+// @Success 200 {object} utils.ResponseData
+// @Failure 400 {object} utils.ErrorResponse
+// @Router /users [get]
 func (ctrl *UserController) GetUsers(c *fiber.Ctx) error {
 	q := new(utils.QueryParams)
 	if err := c.QueryParser(q); err != nil {
@@ -35,6 +49,16 @@ func (ctrl *UserController) GetUsers(c *fiber.Ctx) error {
 	return h.Ok(c, users, "users fetched successfully", &meta)
 }
 
+// Create User godoc
+// @Summary Create User
+// @Description Create User
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param user body dto.CreateUserDTO true "User"
+// @Success 201 {object} utils.ResponseData
+// @Failure 400 {object} utils.ErrorResponse
+// @Router /users [post]
 func (ctrl *UserController) CreateUser(c *fiber.Ctx) error {
 	h := &utils.ResponseHandler{}
 	var dto dto.CreateUserDTO
@@ -49,6 +73,16 @@ func (ctrl *UserController) CreateUser(c *fiber.Ctx) error {
 	return h.Created(c, nil, "user created successfully")
 }
 
+// Get User godoc
+// @Summary Get User
+// @Description Get User
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param id path string true "ID"
+// @Success 200 {object} utils.ResponseData
+// @Failure 400 {object} utils.ErrorResponse
+// @Router /users/{id} [get]
 func (ctrl *UserController) GetUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -62,6 +96,17 @@ func (ctrl *UserController) GetUser(c *fiber.Ctx) error {
 	return h.Ok(c, user, "users fetched successfully", nil)
 }
 
+// Update User godoc
+// @Summary Update User
+// @Description Update User
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param id path string true "ID"
+// @Param user body dto.UpdateUserDTO true "User"
+// @Success 200 {object} utils.ResponseData
+// @Failure 400 {object} utils.ErrorResponse
+// @Router /users/{id} [put]
 func (ctrl *UserController) UpdateUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -79,6 +124,16 @@ func (ctrl *UserController) UpdateUser(c *fiber.Ctx) error {
 	return h.Ok(c, user, "user updated successfully", nil)
 }
 
+// Delete User godoc
+// @Summary Delete User
+// @Description Delete User
+// @Tags Users
+// @Produce json
+// @Accept json
+// @Param id path string true "ID"
+// @Success 200 {object} utils.ResponseData
+// @Failure 400 {object} utils.ErrorResponse
+// @Router /users/{id} [delete]
 func (ctrl *UserController) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 

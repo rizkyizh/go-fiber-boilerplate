@@ -15,6 +15,9 @@ Go Fiber Boilerplate is a starter template for building simple REST APIs using G
 - **Pagination**: Easy-to-use pagination for API responses.
 - **Validation**: Input validation to ensure data integrity.
 - **Clean Architecture**: Organized project structure following clean architecture principles.
+- **Swagger**: API documentation using Swagger.
+
+<img  src="./swagger.png" title="Swagger" />
 
 ## Getting Started
 
@@ -61,6 +64,10 @@ Go Fiber Boilerplate is a starter template for building simple REST APIs using G
 │   ├── routes         # Route definitions and setup
 │   └── services       # Business logic and service layer
 ├── config             # Configuration settings
+├── docs               # Swagger documentation
+│   ├── docs.go        # Swagger documentation generator
+│   ├── swagger.json   # Swagger JSON file
+│   └── swagger.yaml   # Swagger YAML file
 ├── database           # Database connection setup and migrations
 ├── utils              # Utility functions and helpers
 ├── middlewares        # Fiber middleware for request processing
