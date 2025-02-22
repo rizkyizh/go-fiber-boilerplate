@@ -16,6 +16,8 @@ type Meta struct {
 	TotalCurrentPage int `json:"totalCurrentPage"`
 	TotalPage        int `json:"totalPage"`
 	TotalData        int `json:"totalData"`
+	RangeStart       int `json:"rangeStart"`
+	RangeEnd         int `json:"rangeEnd"`
 }
 
 func MetaPagination(
@@ -24,12 +26,26 @@ func MetaPagination(
 	totalCurrentPage int,
 	total int,
 ) Meta {
+	totalPage := (total + perPage - 1) / perPage
+
+	rangeStart := 1
+	if page > 1 {
+		rangeStart = (page-1)*perPage + 1
+	}
+
+	rangeEnd := total
+	if totalCurrentPage == perPage {
+		rangeEnd = page * totalCurrentPage
+	}
+
 	return Meta{
 		CurrentPage:      page,
 		PerPage:          perPage,
 		TotalCurrentPage: totalCurrentPage,
-		TotalPage:        ((total + perPage - 1) / perPage),
+		TotalPage:        totalPage,
 		TotalData:        total,
+		RangeStart:       rangeStart,
+		RangeEnd:         rangeEnd,
 	}
 }
 
