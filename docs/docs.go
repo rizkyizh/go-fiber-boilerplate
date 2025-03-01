@@ -322,7 +322,14 @@ const docTemplate = `{
                 },
                 "totalPage": {
                     "type": "integer"
-                }
+                },
+    "rangeStart": {
+          "type": "integer"
+        },
+        "rangeEnd": {
+          "type": "integer"
+        }
+
             }
         },
         "utils.ResponseData": {
