@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"errors"
-
 	"github.com/gofiber/fiber/v2"
 
 	"github.com/rizkyizh/go-fiber-boilerplate/app/dto"
@@ -112,12 +110,12 @@ func (ctrl *UserController) UpdateUser(c *fiber.Ctx) error {
 
 	h := &utils.ResponseHandler{}
 
-	var dto *dto.UpdateUserDTO
+	var dto dto.UpdateUserDTO
 	if err := c.BodyParser(&dto); err != nil {
 		return h.BadRequest(c, []string{err.Error()})
 	}
 
-	user, err := ctrl.service.UpdateUser(id, dto)
+	user, err := ctrl.service.UpdateUser(id, &dto)
 	if err != nil {
 		return h.InternalServerError(c, []string{err.Error()})
 	}
@@ -140,9 +138,6 @@ func (ctrl *UserController) DeleteUser(c *fiber.Ctx) error {
 	h := &utils.ResponseHandler{}
 	err := ctrl.service.DeleteUser(id)
 	if err != nil {
-		if errors.Is(err, errors.New("user not found")) {
-			return h.NotFound(c, []string{err.Error()})
-		}
 		return h.InternalServerError(c, []string{err.Error()})
 	}
 

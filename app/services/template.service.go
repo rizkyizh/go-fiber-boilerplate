@@ -58,8 +58,9 @@ func (s *userService) GetAllUsers(query utils.QueryParams) ([]*dto.UserDTO, util
 func (s *userService) GetUserById(id string) (*dto.UserDTO, error) {
 	userId, err := strconv.ParseUint(id, 10, 0)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
+
 	user, err := s.userRepository.GetUser(uint(userId))
 	if err != nil {
 		return nil, err
@@ -73,7 +74,7 @@ func (s *userService) GetUserById(id string) (*dto.UserDTO, error) {
 func (s *userService) UpdateUser(id string, dto *dto.UpdateUserDTO) (*dto.UserDTO, error) {
 	userId, err := strconv.ParseUint(id, 10, 0)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	user, err := s.userRepository.GetUser(uint(userId))
