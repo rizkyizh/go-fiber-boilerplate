@@ -24,6 +24,7 @@ func NewUserController(service services.UserService) *UserController {
 // @Tags Users
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param page query int false "Page"
 // @Param perPage query int false "PerPage"
 // @Param sort query string false "Sort"
@@ -31,6 +32,7 @@ func NewUserController(service services.UserService) *UserController {
 // @Param status query string false "Status"
 // @Success 200 {object} utils.ResponseData
 // @Failure 400 {object} utils.ErrorResponse
+// @Failure 401 {object} utils.ErrorResponse
 // @Router /users [get]
 func (ctrl *UserController) GetUsers(c *fiber.Ctx) error {
 	q := new(utils.QueryParams)
@@ -49,13 +51,16 @@ func (ctrl *UserController) GetUsers(c *fiber.Ctx) error {
 
 // Create User godoc
 // @Summary Create User
-// @Description Create User
+// @Description Create User (Admin only)
 // @Tags Users
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param user body dto.CreateUserDTO true "User"
 // @Success 201 {object} utils.ResponseData
 // @Failure 400 {object} utils.ErrorResponse
+// @Failure 401 {object} utils.ErrorResponse
+// @Failure 403 {object} utils.ErrorResponse
 // @Router /users [post]
 func (ctrl *UserController) CreateUser(c *fiber.Ctx) error {
 	h := &utils.ResponseHandler{}
@@ -77,9 +82,11 @@ func (ctrl *UserController) CreateUser(c *fiber.Ctx) error {
 // @Tags Users
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param id path string true "ID"
 // @Success 200 {object} utils.ResponseData
-// @Failure 400 {object} utils.ErrorResponse
+// @Failure 401 {object} utils.ErrorResponse
+// @Failure 404 {object} utils.ErrorResponse
 // @Router /users/{id} [get]
 func (ctrl *UserController) GetUser(c *fiber.Ctx) error {
 	id := c.Params("id")
@@ -96,15 +103,18 @@ func (ctrl *UserController) GetUser(c *fiber.Ctx) error {
 
 // Update User godoc
 // @Summary Update User
-// @Description Update User
+// @Description Update User (Admin only)
 // @Tags Users
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param id path string true "ID"
 // @Param user body dto.UpdateUserDTO true "User"
 // @Success 200 {object} utils.ResponseData
 // @Failure 400 {object} utils.ErrorResponse
-// @Router /users/{id} [put]
+// @Failure 401 {object} utils.ErrorResponse
+// @Failure 403 {object} utils.ErrorResponse
+// @Router /users/{id} [patch]
 func (ctrl *UserController) UpdateUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 
@@ -124,13 +134,15 @@ func (ctrl *UserController) UpdateUser(c *fiber.Ctx) error {
 
 // Delete User godoc
 // @Summary Delete User
-// @Description Delete User
+// @Description Delete User (Admin only)
 // @Tags Users
 // @Produce json
 // @Accept json
+// @Security BearerAuth
 // @Param id path string true "ID"
 // @Success 200 {object} utils.ResponseData
-// @Failure 400 {object} utils.ErrorResponse
+// @Failure 401 {object} utils.ErrorResponse
+// @Failure 403 {object} utils.ErrorResponse
 // @Router /users/{id} [delete]
 func (ctrl *UserController) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")

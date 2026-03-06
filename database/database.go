@@ -32,4 +32,6 @@ func ConnectDB() {
 	if err != nil {
 		log.Fatalf("Error AutoMigrate database: %v", err)
 	}
+
+	Seed()
 }

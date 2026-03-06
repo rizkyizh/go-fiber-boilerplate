@@ -5,12 +5,15 @@ type UserDTO struct {
 	Name  string `json:"name"  validate:"required,min=3,max=32"`
 	Email string `json:"email" validate:"required,email"`
 	Age   int    `json:"age"   validate:"required"`
+	Role  string `json:"role"`
 }
 
 type CreateUserDTO struct {
-	Name  string `json:"name"  validate:"required,min=3,max=32"`
-	Email string `json:"email" validate:"required,email"`
-	Age   int    `json:"age"   validate:"required"`
+	Name     string `json:"name"     validate:"required,min=3,max=32"`
+	Email    string `json:"email"    validate:"required,email"`
+	Password string `json:"password" validate:"required,min=8"`
+	Age      int    `json:"age"      validate:"required"`
+	Role     string `json:"role"     validate:"omitempty,oneof=admin user"`
 }
 
 type UpdateUserDTO struct {

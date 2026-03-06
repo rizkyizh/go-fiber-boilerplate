@@ -4,6 +4,8 @@ import (
 	"errors"
 	"strconv"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/rizkyizh/go-fiber-boilerplate/app/dto"
 	"github.com/rizkyizh/go-fiber-boilerplate/app/mappers"
 	"github.com/rizkyizh/go-fiber-boilerplate/app/repositories"
@@ -29,9 +31,15 @@ func NewUserService(userRepository repositories.UserRepository) UserService {
 }
 
 func (s *userService) CreateUser(dto *dto.CreateUserDTO) error {
-	user := mappers.CreateUserDTO_ToUserModel(dto)
+	hashed, err := bcrypt.GenerateFromPassword([]byte(dto.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
 
-	err := s.userRepository.CreateUser(user)
+	user := mappers.CreateUserDTO_ToUserModel(dto)
+	user.Password = string(hashed)
+
+	err = s.userRepository.CreateUser(user)
 	if err != nil {
 		return err
 	}

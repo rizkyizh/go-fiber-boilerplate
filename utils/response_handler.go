@@ -54,6 +54,18 @@ func (h *ResponseHandler) Forbidden(c *fiber.Ctx, messages []string) error {
 	return h.sendError(c, "FORBIDDEN", fiber.StatusForbidden, messages)
 }
 
+func (h *ResponseHandler) Unauthorized(c *fiber.Ctx, messages []string) error {
+	return h.sendError(c, "UNAUTHORIZED", fiber.StatusUnauthorized, messages)
+}
+
+func (h *ResponseHandler) ServiceUnavailable(c *fiber.Ctx, messages []string) error {
+	return h.sendError(c, "SERVICE_UNAVAILABLE", fiber.StatusServiceUnavailable, messages)
+}
+
+func (h *ResponseHandler) TooManyRequests(c *fiber.Ctx, messages []string) error {
+	return h.sendError(c, "TOO_MANY_REQUESTS", fiber.StatusTooManyRequests, messages)
+}
+
 func (h *ResponseHandler) NotFound(c *fiber.Ctx, messages []string) error {
 	return h.sendError(c, "NOT_FOUND", fiber.StatusNotFound, messages)
 }

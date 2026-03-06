@@ -1,30 +1,41 @@
 # Go Fiber Boilerplate
 
-Go Fiber Boilerplate is a starter template for building simple REST APIs using Go Fiber, GORM, and PostgreSQL. This project provides a ready-to-use setup with features like CRUD operations, pagination, and validation, following the clean architecture principles.
+Go Fiber Boilerplate is a production-ready starter template for building REST APIs using Go Fiber, GORM, and PostgreSQL. It includes authentication, authorization, security hardening, structured logging, and more — following clean architecture principles.
 
 ## Technologies Used
 
-- **Golang**: The programming language used for this project.
-- **Fiber**: An Express-inspired web framework for Golang.
-- **GORM**: The ORM library for Golang.
-- **PostgreSQL**: The relational database used for storing data.
-- **Air**: A tool for running Go applications in a development environment.
+- **Golang** — programming language
+- **Fiber v2** — Express-inspired web framework
+- **GORM** — ORM library for Go
+- **PostgreSQL** — relational database
+- **JWT** — stateless authentication (`golang-jwt/jwt/v5`)
+- **Zerolog** — structured JSON logging (`rs/zerolog`)
+- **Swagger** — auto-generated API docs (`swaggo/swag`)
+- **Air** — hot reload for development
 
 ## Features
 
-- **CRUD Operations**: Predefined template for Create, Read, Update, and Delete operations.
-- **Pagination**: Easy-to-use pagination for API responses.
-- **Validation**: Input validation to ensure data integrity.
-- **Clean Architecture**: Organized project structure following clean architecture principles.
-- **Swagger**: API documentation using Swagger.
-
-<img  src="./swagger.png" title="Swagger" />
+| Feature | Description |
+|---|---|
+| **JWT Auth** | Register, login, refresh token, logout |
+| **RBAC** | Role-based access control (`admin`, `user`) |
+| **Rate Limiting** | 60 req/min per IP (global) |
+| **Helmet** | Security HTTP headers |
+| **Request ID** | `X-Request-ID` on every request |
+| **Structured Logging** | JSON logs via zerolog |
+| **Health Check** | `GET /health` — checks DB connectivity |
+| **CRUD + Pagination** | Full user resource with pagination |
+| **Validation** | Input validation with `go-playground/validator` |
+| **Seeder** | Auto-seeds admin and user fixtures on startup |
+| **Unit Tests** | Service-layer tests with manual mocks |
+| **Makefile** | Developer shortcuts |
+| **Swagger Docs** | Full API documentation with security support |
 
 ## Getting Started
 
 ### Prerequisites
 
-- Go (version 1.16 or higher)
+- Go 1.23+
 - PostgreSQL
 
 ### Installation
@@ -39,55 +50,126 @@ Go Fiber Boilerplate is a starter template for building simple REST APIs using G
 2. **Install dependencies:**
 
    ```bash
-   go mod tidy
+   make tidy
    ```
 
-3. **Setup PostgreSQL:**
-
-   - Create a PostgreSQL database and update the connection settings in the `config` file.
-
-4. **Run the application:**
+3. **Configure environment:**
 
    ```bash
-   air
+   cp .example.env .env
+   # Edit .env with your values
    ```
 
-### Project Structure
+4. **Run with hot reload:**
+
+   ```bash
+   make run
+   ```
+
+### Environment Variables
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `DATABASE_URL` | ✅ | — | PostgreSQL DSN |
+| `JWT_SECRET` | ⚠️ | `change-me-in-production-access` | Access token signing secret |
+| `JWT_REFRESH_SECRET` | ⚠️ | `change-me-in-production-refresh` | Refresh token signing secret |
+| `JWT_ACCESS_EXPIRY` | ❌ | `15m` | Access token TTL (Go duration string) |
+| `JWT_REFRESH_EXPIRY` | ❌ | `168h` | Refresh token TTL |
+| `APP_ENV` | ❌ | — | Set to `development` for pretty logs |
+
+> ⚠️ Always override `JWT_SECRET` and `JWT_REFRESH_SECRET` in production.
+
+### Seeded Users
+
+On every startup the database is seeded with:
+
+| Email | Password | Role |
+|---|---|---|
+| `admin@example.com` | `Admin1234!` | `admin` |
+| `user@example.com` | `User1234!` | `user` |
+
+## API Endpoints
+
+### Auth (`/auth`)
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| POST | `/auth/register` | Public | Register a new account |
+| POST | `/auth/login` | Public | Login, receive token pair |
+| POST | `/auth/refresh` | Public | Refresh access token |
+| POST | `/auth/logout` | 🔒 Bearer | Invalidate refresh token |
+
+### Users (`/users`)
+
+| Method | Path | Auth | Role | Description |
+|---|---|---|---|---|
+| GET | `/users` | 🔒 Bearer | any | List users (paginated) |
+| GET | `/users/:id` | 🔒 Bearer | any | Get single user |
+| POST | `/users` | 🔒 Bearer | admin | Create user |
+| PATCH | `/users/:id` | 🔒 Bearer | admin | Update user |
+| DELETE | `/users/:id` | 🔒 Bearer | admin | Delete user |
+
+### Other
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/health` | App and DB health status |
+| GET | `/swagger/*` | Interactive API docs |
+
+## Makefile Targets
 
 ```bash
-.
-├── app
-│   ├── controllers    # HTTP handlers for processing requests and returning responses
-│   ├── dto            # Data Transfer Objects for request and response payloads
-│   ├── mappers        # Functions to map between models and DTOs
-│   ├── models         # Data models representing database tables
-│   ├── repositories   # Data access layer for interacting with the database
-│   ├── routes         # Route definitions and setup
-│   └── services       # Business logic and service layer
-├── config             # Configuration settings
-├── docs               # Swagger documentation
-│   ├── docs.go        # Swagger documentation generator
-│   ├── swagger.json   # Swagger JSON file
-│   └── swagger.yaml   # Swagger YAML file
-├── database           # Database connection setup and migrations
-├── utils              # Utility functions and helpers
-├── middlewares        # Fiber middleware for request processing
-├── routes             # Additional route definitions
-├── go.mod             # Go module file
-├── go.sum             # Go module dependencies
-└── main.go            # Entry point of the application
+make run            # Start with hot reload (air)
+make build          # Compile binary to ./tmp/main
+make test           # Run all unit tests
+make test/coverage  # Run tests with HTML coverage report
+make swagger        # Regenerate Swagger docs (requires swag)
+make lint           # Run golangci-lint
+make tidy           # Tidy go modules
 ```
 
-### Contributing
+## Middleware Chain
 
-Feel free to contribute to this project! Whether it's bug reports, feature requests, or pull requests, all contributions are welcome.
+```
+RequestID → Logger → Helmet → CORS → RateLimiter → Routes
+```
+
+Protected routes additionally pass through:
+
+```
+AuthRequired → [RequireRole] → Handler
+```
+
+## Project Structure
+
+```
+.
+├── app
+│   ├── controllers    # HTTP handlers (auth, users, health)
+│   ├── dto            # Request/response DTOs with validation tags
+│   ├── mappers        # Model ↔ DTO conversion functions
+│   ├── models         # GORM models (User with Role, Password)
+│   ├── repositories   # GORM data access layer
+│   ├── routes         # DI wiring + route registration
+│   └── services       # Business logic (auth, users)
+├── config             # Environment config loader
+├── database           # DB connection, migrations, seeder
+├── docs               # Auto-generated Swagger files
+├── middlewares        # auth, rbac, cors, helmet, logger, requestid, limiter
+├── routes             # Top-level router
+├── utils              # Response handler, JWT, pagination, validator
+├── Makefile
+└── main.go
+```
+
+## Contributing
 
 1. Fork the project.
-2. Create your feature branch `git checkout -b feature/YourFeature`.
-3. Commit your changes `git commit -m 'feat: add some YourFeature'`.
-4. Push to the branch `git push origin feature/YourFeature`.
-5. Open a pull request.
+2. Create your branch `git checkout -b feat/your-feature`.
+3. Commit `git commit -m 'feat: add your feature'`.
+4. Push and open a pull request.
 
-### License
+## License
 
 This project is licensed under the MIT License.
+

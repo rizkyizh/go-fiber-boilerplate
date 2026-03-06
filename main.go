@@ -22,7 +22,10 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:3000
 // @BasePath /
-
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Enter: Bearer <your_token>
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
@@ -33,7 +36,11 @@ func main() {
 
 	app := fiber.New()
 
+	middlewares.SetupRequestID(app)
+	middlewares.SetupLogger(app)
+	middlewares.SetupHelmet(app)
 	middlewares.SetupCORS(app)
+	middlewares.SetupRateLimiter(app)
 
 	routes.SetupRoutesApp(app)
 
